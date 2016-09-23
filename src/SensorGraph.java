@@ -51,41 +51,38 @@ public class SensorGraph {
 
 
         // configure the connect button and use another thread to listen for data
-        connectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                if(connectButton.getText().equals("Connect")){
-                    //attempt to connect to the serial port
-                    chosenPort = SerialPort.getCommPort(portLists.getSelectedItem().toString());
-                    chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
-                    if (chosenPort.openPort()){
-                        connectButton.setText("Disconnect");
-                        portLists.setEnabled(false);
-                    }
+        connectButton.addActionListener(arg0 -> {
+            if(connectButton.getText().equals("Connect")){
+                //attempt to connect to the serial port
+                chosenPort = SerialPort.getCommPort(portLists.getSelectedItem().toString());
+                chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 0, 0);
+                if (chosenPort.openPort()){
+                    connectButton.setText("Disconnect");
+                    portLists.setEnabled(false);
+                }
 
-                    //create a new thread that listens for incoming text and populates the graph
-                    Thread thread = new Thread(){
-                        @Override
-                        public void run(){
-                            Scanner scanner = new Scanner(chosenPort.getInputStream());
-                            int x = 0;
-                            while (scanner.hasNextLine()) {
-                                String line = scanner.nextLine();
-                                int number = Integer.parseInt(line);
-                                series.add(x++, number);
-                            }
-                            scanner.close();
+                //create a new thread that listens for incoming text and populates the graph
+                Thread thread = new Thread(){
+                    @Override
+                    public void run(){
+                        Scanner scanner = new Scanner(chosenPort.getInputStream());
+                        int x = 0;
+                        while (scanner.hasNextLine()) {
+                            String line = scanner.nextLine();
+                            int number = Integer.parseInt(line);
+                            series.add(x++, number);
                         }
-                    };
-                    thread.start();
-                }
-                else{
-                    //disconnect to the serial port
-                    chosenPort.closePort();
-                    portLists.setEnabled(true);
-                    connectButton.setText("Connect");
+                        scanner.close();
+                    }
+                };
+                thread.start();
+            }
+            else{
+                //disconnect to the serial port
+                chosenPort.closePort();
+                portLists.setEnabled(true);
+                connectButton.setText("Connect");
 
-                }
             }
         });
 
