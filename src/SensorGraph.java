@@ -20,6 +20,7 @@ import java.util.Scanner;
 
 public class SensorGraph {
     static SerialPort chosenPort;
+    static int x = 0;
 
     public static void main(String[] args) {
         //create and configure window
@@ -66,12 +67,12 @@ public class SensorGraph {
                     @Override
                     public void run(){
                         Scanner scanner = new Scanner(chosenPort.getInputStream());
-                        int x = 0;
                         while (scanner.hasNextLine()) {
                             try {
                                 String line = scanner.nextLine();
                                 int number = Integer.parseInt(line);
                                 series.add(x++, 1023 - number);
+                                window.repaint();
                             }
                             catch (Exception ignored) {}
                         }
@@ -85,6 +86,8 @@ public class SensorGraph {
                 chosenPort.closePort();
                 portLists.setEnabled(true);
                 connectButton.setText("Connect");
+                series.clear();
+                x = 0;
 
             }
         });
