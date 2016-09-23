@@ -68,9 +68,12 @@ public class SensorGraph {
                         Scanner scanner = new Scanner(chosenPort.getInputStream());
                         int x = 0;
                         while (scanner.hasNextLine()) {
-                            String line = scanner.nextLine();
-                            int number = Integer.parseInt(line);
-                            series.add(x++, number);
+                            try {
+                                String line = scanner.nextLine();
+                                int number = Integer.parseInt(line);
+                                series.add(x++, 1023 - number);
+                            }
+                            catch (Exception ignored) {}
                         }
                         scanner.close();
                     }
