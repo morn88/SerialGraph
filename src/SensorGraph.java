@@ -13,9 +13,9 @@ import java.util.Scanner;
 
 /**
  * Created by m0rnAinu on 23.09.2016.
- * SensorGraph. If dont use Sensor, graph draw volt value from analog pin from Arduino.
+ * SensorGraph. If don't use Sensor, graph draw volt value from analog pin from Arduino.
  * from youtube video - https://www.youtube.com/watch?v=cw31L_OwX3A&t=2449s
- * Autor - upgrdman
+ * Author - upgrdman
  */
 
 public class SensorGraph {
@@ -28,10 +28,10 @@ public class SensorGraph {
         window.setTitle("Sensor Graph GUI");
         window.setSize(600, 400);
         window.setLayout(new BorderLayout());
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // create a drop-down box and connect button, then place them at the top of the window
-        JComboBox<String> portLists = new JComboBox<String>();
+        JComboBox<String> portLists = new JComboBox<>();
         JButton connectButton = new JButton("Connect");
         JPanel topPanel = new JPanel();
         topPanel.add(portLists);
@@ -50,8 +50,10 @@ public class SensorGraph {
         JFreeChart chart = ChartFactory.createXYLineChart("Arduino Analog Readings", "Time (seconds)", "Volts", dataset);
 
         XYPlot plot = chart.getXYPlot();
-        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer(true, false);
+
         renderer.setSeriesPaint(0, Color.GREEN);
+        renderer.setSeriesStroke(0, new BasicStroke(3.0f));
         plot.setBackgroundPaint(Color.BLACK);
 
         plot.setRenderer(renderer);
@@ -80,7 +82,7 @@ public class SensorGraph {
                             try {
                                 String line = scanner.nextLine();
                                 int number = Integer.parseInt(line);
-                                series.add(x++, 1023 - number);
+                                series.add(x++, number);
                                 window.repaint();
                             }
                             catch (Exception ignored) {}
