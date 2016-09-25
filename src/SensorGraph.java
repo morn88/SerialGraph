@@ -2,6 +2,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -46,6 +48,15 @@ public class SensorGraph {
         XYSeries series = new XYSeries("Arduino Sensor Readings");
         XYSeriesCollection dataset = new XYSeriesCollection(series);
         JFreeChart chart = ChartFactory.createXYLineChart("Arduino Analog Readings", "Time (seconds)", "Volts", dataset);
+
+        XYPlot plot = chart.getXYPlot();
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesPaint(0, Color.GREEN);
+        plot.setBackgroundPaint(Color.BLACK);
+
+        plot.setRenderer(renderer);
+
+
         window.add(new ChartPanel(chart), BorderLayout.CENTER);
 
 
